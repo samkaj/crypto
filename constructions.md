@@ -33,7 +33,8 @@ Decryption works by using the corresponding counter with the key, using the **en
 
 This operation uses a counter block which contains the nonce and counter concatenated when the nonce is not random! When it is random, you can use any inversible actions, such as addition, concatenation or XOR. Since concatenating works for both, I'd stick to that..
 ____
-#### RSA
+RSA
+-------
 #rsa 
 Works in four steps:
 ### 1. Key generation
@@ -139,3 +140,26 @@ $Reconstruct(s_{i_1},s_{i_2},\cdots,s_{i_t})$: let $I=\{i_1,\cdots i_t\}$ be the
 - Compute the Lagrange coefficients for the set $I$: $\mathscr{l}_i=\prod_{j\in I \setminus \{i\}}\frac{j}{j-i} \mod p$
 - Recover the secret using the sum and coefficients: $s=\sum_{i\in I}(s_i\cdot \mathscr{l}_i(0))\mod p$. 
 	- Clarification: $\mathscr{l}_i(0) = \frac{-s_1}{i_1-i} + \cdots + \frac{-s_t}{i_t-i} \mod p$, where each term $\frac{-s_j}{i_j-i}$ is evaluated modulo $p$.
+___
+Pedersen Commitment Scheme
+----------------------------------------------------
+Let $\mathbb{G}=\langle g \rangle$ be a cyclic group of primer order $q$, and $h$ be a random element in $\mathbb{G}\setminus g$. Let $q,g,h$ be public. The commitment function is as follows: 
+- $Commit(m,r) = g^mh^r \mod p = c, r \leftarrow \$\mathbb{Z}_q, p=2q+1$
+- It is important that $p$ is prime, since it will guarantee that $\mathbb{G}$ is a subgroup of the larger $\mathbb{Z}_p^*$.
+___
+Schnorr
+-------------
+### Identification
+Given two large primes, $p, q=2p+1$, $g, \langle g \rangle = \mathbb{G}$, where the subgroup of $\mathbb{Z}_p^*$ is of prime order $q$, we also have the secret key $x$. The private key is the witness identifying the prover. The public key is $X=g^x \mod p$. The identification works as follows:
+1. The prover chooses some random number $v$ and sends the commitment, $V=g^v\mod p$ to the verifier.
+2. The verifier chooses some random number $c$, known as the challenge, and sends it to the prover.
+3. The prover computes the response and returns it to the verifier, $b=v+cx \mod q$.
+4. The verifier accepts iff $g^b=V\cdot X^c$
+
+### $\Sigma$-protocol
+Given a relation $R$, a prover $V$, and a verifier $V$, a $\Sigma$-protocol satisfies the following properties:
+1. **Completeness**: if $P$ and $V$ follow the protocol on a given input, $x$ and private input $w$ to $P$ where $(x,w)\in R$, then $V$ always accepts
+2. **Special soundness**: there exists a PPT algorithm $\mathscr{E}$, the extractor, that given any $x$ and any pair of accepting transcripts $(a,e,z)$ and $(a,e',z')$ for $x$ with $e\neq e'$, outputs $w$ s.t. $(x,w)\in R$.
+3. **SHVZK**: for every $x,w \in R$ and every $e \in \{0,1\}^t$ there exists a PPT algorithm $Sim$, the simulator, which given input $(x,e)$ outputs transcripts $(a,e,z)$ that are distributed like real conversations: $\{Sim(x,e)\}=\{\langle P(x,w), V(x,e)\rangle\}$
+	- The simulator exists to show that the verifier doesn't learn anything from the interaction with the prover, except that they know the secret.
+	- If the simulator can generate a transcript that is indistinguishable from a real one, then it means that the verifier cannot be learning anything about the secret, since the simulator generates the transcript without knowing the secret!

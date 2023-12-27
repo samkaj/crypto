@@ -1,7 +1,6 @@
-#crypto 
 Exam: 12-01-12
 =====================
-Homepage for crypto tentap. Each heading is separated into its own page, where the tags can be found as well.
+Homepage for crypto tentap. #crypto 
 
 Obsidian import
 --------------------------
@@ -30,8 +29,8 @@ Constructions
 - [x] ELGamal #elgamal
 - [x] Diffie-Hellman key exchange #dh 
 - [x] Shamir secret sharing and additive secret sharing #shamir
-- [ ] Pedersen commitment scheme #pedersen
-- [ ] Schnorr identification and sigma protocol #schnorr
+- [x] Pedersen commitment scheme #pedersen
+- [x] Schnorr identification and sigma protocol #schnorr
 
 Proofs 
 ----------
