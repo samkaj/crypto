@@ -20,19 +20,11 @@ It is an insecure mode of operation, since it contains no randomness and consequ
 Encryption works by XORing the current block with the previous. The first block is XORed with an IV. This ensures that each ciphertext depends on the preceding blocks. The IV is used for ensuring that identical messages don't produce the same ciphertext. Encryption is serializable, decryption parallelizable.
 
 **Encryption:**
-$$
-C_0 = IV
-$$
-$$
-C_i = E_k(P_i \oplus C_{i-1})
-$$
+- $C_0 = IV$
+- $C_i = E_k(P_i \oplus C_{i-1})$
 **Decryption:**
-$$
-C_0 = IV
-$$
-$$
-P_i=D_k(C_i) \oplus C_{i-1}
-$$
+- $C_0 = IV$
+- $P_i=D_k(C_i) \oplus C_{i-1}$
 #### CTR
 #ctr #stream-cipher
 Fully parallelizable. Uses a nonce (same as IV) which is then incremented for each block, that is why it is called a counter. Encryption works by sending the nonce and key into the encryption (AES), the result is then XORed with the ciphertext.
@@ -44,7 +36,7 @@ ____
 #### RSA
 #rsa 
 Works in four steps:
-##### 1. Key generation
+### 1. Key generation
 This is the most complicated part.
 1. Choose two large primes $p,q$.
 2. Compute $n=pq$.
@@ -55,13 +47,13 @@ This is the most complicated part.
 5. Determine $d = e^{-1} \mod \lambda(n)$. This is the *private key exponent*.
 **Public information:** $n,e,d$
 **Private information:** $p,q,\lambda(n)$
-###### 2. Key distribution
+#### 2. Key distribution
 Given that Bob wants to send a message to Alice. Alice sends her public key $(n,e)$ to Bob and keeps her secret to herself.
-###### 3. Encryption
+#### 3. Encryption
 With the public key from Alice, bob can encrypt the message M.
 1. Bob turns $M$ into an integer $m$ (the padded plaintext), such that $0\leq m \lt n$, by using a padding scheme. 
 2. He computes $c=m^e (\mod n)$ and sends it to Alice.
-###### 4. Decryption
+#### 4. Decryption
 Alice receives $c$ and uses $c^d=(m^e)^d = m\ (\mod n)$. 
 #### Signing
 It is possible to encrypt a message which may be decrypted by anyone, but only encrypted by one person, this is a digital signature.
@@ -80,9 +72,9 @@ In this way, since it is a blind signature, the signer can digitally sign the me
 _______
 Diffie-Hellman key exchange
 -----------------------------------------------
-##### Setup
+### Setup
 Let $p$ be a large prime. Find a generator $g$ of a subgroup of prime order $q$ in $\mathbb{Z}_p^*$. Let $p,q,g$ be public.
-##### Key exchange
+### Key exchange
 Alice and bob wants to exchange keys. 
 Both parties know $p,q,g$
 1. Alice picks $a \leftarrow \$\mathbb{Z}_q^*$
@@ -97,13 +89,13 @@ ___
 ElGamal
 -------------
 Uses Diffie-Hellman key exchange to establish a shared secret, then using OTP for encrypting the message.
-##### Keygen
+### Keygen
 Alice generates a key pair.
 - Generate a cyclic croup $G$ of order $q$ with a generator $g$.
 - Choose $x$, a random element from $\{1,\dots,q-1\}$
 - Compute $h=g^x$
 - Alice keeps $x$ as her private key. The public key consists of $(G,q,g,h)$
-##### Encryption
+### Encryption
 Bob uses Alice's public key to encrypt the message $M$:
 - Map the message $M$ to an element $m$ of $G$ using a reversible mapping function
 - Choose $y$, a random element from $\{1,\dots,q-1\}$
@@ -111,7 +103,7 @@ Bob uses Alice's public key to encrypt the message $M$:
 - Compute $c_1=g^y$
 - Compute $c_2=m\cdot s$
 - Bob sends $(c_1,c_2)$ to Alice
-##### Decryption
+### Decryption
 Alice now decrypts the pair $(c_1,c_2)$ with her private key:
 - Compute $s=c_1^x$ this is because $c_1=g^y \implies c_1^x=g^{xy} = h^y$
 - Compute the inverse of $s$ in $G$ using the extended Euclidean algorithm for example
@@ -136,13 +128,13 @@ ___
 Shamir secret sharing
 ------------------------------------
 This scheme uses polynomials to construct a secret. By having a specific degree polynomial, set the shares as coefficients to it which together solve the polynomial, which is the secret.
-##### Share
+### Share
 $Share(s)$, given the value $s \in \mathbb{Z}_p$ where $p$ is a prime or a power of a prime, do:
 - Sample $t-1$ random values, where $t$ is the number of parties, $a_1,\cdots, a_{t-1}\leftarrow \$\mathbb{Z}_p$
 - Construct the polynomial $f(x) = s+ a_1x + a_2x^2+\cdots+a_{t-1}x^{t-1}\in \mathbb{Z}_p[x]$
 - Compute the $n$ shares by evaluating $f(x)$ on $n$ *distinct* points: $s_1=f(i)\ for\ i \in \{1,\cdots,n\}$ 
 - Send the share to $s_i$ to party $P_i$ via a secure channel
-##### Reconstruct
+### Reconstruct
 $Reconstruct(s_{i_1},s_{i_2},\cdots,s_{i_t})$: let $I=\{i_1,\cdots i_t\}$ be the set of distinct share indices, do:
 - Compute the Lagrange coefficients for the set $I$: $\mathscr{l}_i=\prod_{j\in I \setminus \{i\}}\frac{j}{j-i} \mod p$
 - Recover the secret using the sum and coefficients: $s=\sum_{i\in I}(s_i\cdot \mathscr{l}_i(0))\mod p$. 

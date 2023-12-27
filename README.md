@@ -5,7 +5,7 @@ Homepage for crypto tentap. Each heading is separated into its own page, where t
 
 Obsidian import
 --------------------------
-Use obsidian for viewing this, otherwise it will look horrible probably
+Use obsidian for viewing this, otherwise tags won't work
 - Download obsidian `brew install --cask obsidian`
 - Clone the repo
 - `File -> Open Vault... -> [path to repo]`
