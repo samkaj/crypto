@@ -46,8 +46,11 @@ This is the most complicated part.
 3. Compute $\lambda(n)$, where $\lambda$ is Carmichael's totient function. $\lambda(n)=lcm(p-1, q-1)$. The lcm can be calculated as follows: $lcm(a,b)= \frac{|ab|}{gcd(a,b)}$. $\lambda(n)$ must be kept secret.
 4. Choose an integer $e$ s.t. $2 < e < \lambda(n)$ and $e, \lambda(n)$ are coprime. $e$ is usually chosen to be $2^{16}+1=65537$. $e$ is public information and sent with the public key.
 5. Determine $d = e^{-1} \mod \lambda(n)$. This is the *private key exponent*.
-**Public information:** $n,e,d$
-**Private information:** $p,q,\lambda(n)$
+
+**Public information:** $n,e$
+
+**Private information:** $p,q,\lambda(n), d$
+
 #### 2. Key distribution
 Given that Bob wants to send a message to Alice. Alice sends her public key $(n,e)$ to Bob and keeps her secret to herself.
 #### 3. Encryption
